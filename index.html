@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module" src="/main.js" defer></script>
+    <title>To Do List</title>
+  </head>
+  <body>
+    <div id="app">
+      <nav>
+        <div id="main-nav">
+          <div>
+            <img src="public/calendar-all.png" />
+            <p>All Tasks</p>
+          </div>
+          <div>
+            <img src="public/calendar-today.png" />
+            <p>Today</p>
+          </div>
+          <div>
+            <img src="public/calendar-week.png" />
+            <p>Next 7 Days</p>
+          </div>
+          <div>
+            <img src="public/calendar-important.png" />
+            <p>Important</p>
+          </div>
+        </div>
+        <div id="projects-nav">
+          <div id="btn-wrapper">
+            <img src="public/plus.png" class="open-project-form" />
+          </div>
+          <div class="project-wrapper">
+            <div>
+              <img src="public/arrow-down.png" />
+              <p>Project Name</p>
+            </div>
+            <div class="projects">
+              <div class="project">
+                <p>Name1</p>
+                <img src="public/star.png" class="star" />
+              </div>
+              <div class="project">
+                <p>Name1</p>
+                <img src="public/star.png" class="star" />
+              </div>
+              <input
+                type="text"
+                class="project-name-input"
+                placeholder="Project name"
+              />
+              <div class="add-project-wrapper">
+                <img class="add-project-button" src="public/btn-plus.png" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <form class="project-container-form hide">
+          <img src="public/plus.png" class="close-project-form" />
+          <label for="container-name">Set project name:</label>
+          <input type="text" name="container-name" id="container-name" />
+          <button class="add-button">Add</button>
+        </form>
+      </nav>
+      <div id="container">
+        <div class="project-list"></div>
+      </div>
+    </div>
+  </body>
+</html>
