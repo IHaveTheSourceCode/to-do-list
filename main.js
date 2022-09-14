@@ -1,10 +1,11 @@
 import "./style.css";
 import "./setEventListeners";
 
-// import javascriptLogo from "./javascript.svg";
-// import { setupCounter } from "./counter.js";
+const container = [];
 
-//object will hold projects container that will hold objects
+//array will hold projectsContainers
+// and project containers will hold projects inside of them
+// and projects will hold notes inside of them
 
 class projectsContainer {
   constructor(container_name, id) {
@@ -30,4 +31,8 @@ class note {
   }
 }
 
-import { callProjectContainerForm } from "./manipulateDOM";
+import {
+  callProjectContainerForm,
+  createProjectContainer,
+} from "./manipulateDOM";
+createProjectContainer("Project Name2");

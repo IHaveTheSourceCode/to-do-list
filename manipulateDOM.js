@@ -1,23 +1,60 @@
-// function createProjectContainerForm
-//will add form to navbar, gets name only
 function callProjectContainerForm() {
   const form = document.querySelector(".project-container-form");
   form.classList.toggle("hide");
 }
 
-function appendProjectForm() {
-  //hides plus button, shows form
-  // if clicked anywhere else cancel form and show plus button
+//function that send info from above form
+
+function unappendProjectForms() {
+  document.querySelectorAll(".project-name-input").innerHTML = "";
+}
+
+function createProjectContainer(project_name) {
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("project-wrapper");
+  const div = document.createElement("div");
+  const img = document.createElement("img");
+  img.src = "public/arrow-down.png";
+  const paragraph = document.createElement("p");
+  paragraph.textContent = project_name;
+  const button = document.createElement("div");
+  button.classList.add("add-project-wrapper");
+  const image = document.createElement("img");
+  image.classList.add("add-project-button");
+  image.src = "public/btn-plus.png";
+
+  appendProjectListener(button, wrapper);
+
+  button.appendChild(image);
+  div.appendChild(img);
+  div.appendChild(paragraph);
+  wrapper.appendChild(div);
+  wrapper.appendChild(button);
+  document.querySelector("#projects-nav").appendChild(wrapper);
+}
+// function createProjectForm
+// function createNoteForm
+// function show/hide projects in container
+
+function toggleProjectSubdirectory() {}
+
+//function that send info from below input
+
+function appendProjectListener(btn, parent) {
   const input = document.createElement("input");
   input.type = "text";
   input.classList.add("project-name-input");
   input.placeholder = "Project name";
-  document.querySelector("");
+
+  input.addEventListener("keydown", (e) => {
+    if (e.code == "Enter") {
+    }
+  });
+
+  btn.addEventListener("click", () => {
+    unappendProjectForms();
+    parent.appendChild(input);
+  });
 }
 
-function unappendProjectForm() {}
-
-// function createProjectForm
-// function createNoteForm
-// function show/hide projects in container
-export { callProjectContainerForm };
+export { callProjectContainerForm, createProjectContainer };

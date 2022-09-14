@@ -111,11 +111,12 @@ nav {
 
 .star {
   width: 1.4rem;
-  margin-left: 55%;
   transition: transform 0.4s;
+  margin-right: 1rem;
 }
 
 .star:hover {
+  cursor: pointer;
   transform: rotate(70deg);
 }
 
@@ -228,4 +229,52 @@ nav {
 .project-name-input:hover,
 .project-name-input:focus {
   outline: 2px solid rgba(128, 128, 128, 0.4);
+}
+
+#app {
+  display: flex;
+}
+
+#container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-list {
+  width: 90%;
+  max-width: 800px;
+  height: 90%;
+  background-color: var(--clr-sidebar);
+  border-radius: 25px;
+  color: var(--clr-text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.note:first-child {
+  margin-top: 1.4rem;
+}
+
+.note {
+  margin-left: 2rem;
+  padding: 0.2rem;
+  border-radius: 15px;
+  width: 90%;
+}
+
+.note:hover {
+  background-color: var(--clr-item-active);
+}
+
+.note-s:hover {
+  cursor: pointer;
+  text-decoration: line-through;
+}
+
+.note {
+  display: flex;
+  align-items: center;
 }
