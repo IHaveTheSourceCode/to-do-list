@@ -16,6 +16,7 @@ body {
   width: 100vw;
   height: 100vh;
   background-color: var(--clr-container-main);
+  overflow-x: hidden;
 }
 
 nav {
@@ -23,7 +24,8 @@ nav {
   width: 25vw;
   min-width: 200px;
   max-width: 350px;
-  height: 100vh;
+  height: fit-content;
+  min-height: 100vh;
   color: var(--clr-text);
   display: flex;
   flex-direction: column;
@@ -110,7 +112,7 @@ nav {
 }
 
 .star {
-  width: 1.4rem;
+  width: 1.6rem;
   transition: transform 0.4s;
   margin-right: 1rem;
 }
@@ -152,7 +154,6 @@ nav {
   font-size: 1.2rem;
 }
 
-/* reset text form */
 #container-name {
   border: none;
   background-color: var(--clr-sidebar);
@@ -244,8 +245,8 @@ nav {
 
 .project-list {
   width: 90%;
-  max-width: 800px;
-  height: 90%;
+  max-width: 1000px;
+  height: 90vh;
   background-color: var(--clr-sidebar);
   border-radius: 25px;
   color: var(--clr-text);
@@ -269,6 +270,11 @@ nav {
   background-color: var(--clr-item-active);
 }
 
+.note-s {
+  font-size: 1.6rem;
+  width: 100%;
+}
+
 .note-s:hover {
   cursor: pointer;
   text-decoration: line-through;
@@ -277,4 +283,34 @@ nav {
 .note {
   display: flex;
   align-items: center;
+}
+
+.arrow-down-image:hover {
+  background-color: var(--clr-item-active);
+}
+
+.due-date {
+  align-self: center;
+  font-size: 1.2rem;
+}
+
+.add-note {
+  margin-top: 20px;
+  width: 120px;
+  height: 50px;
+  align-self: center;
+  border: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 25px;
+  color: whitesmoke;
+  background-color: var(--clr-sidebar);
+  border: 1px solid whitesmoke;
+  transition: color 0.3s, background-color 0.3s;
+}
+
+.add-note:hover {
+  cursor: pointer;
+  background-color: whitesmoke;
+  color: black;
 }
