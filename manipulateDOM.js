@@ -81,20 +81,15 @@ function appendProjectListener(btn, parent) {
       let project_name = document.createElement("p");
       project_name.textContent = input.value;
       project.appendChild(project_name);
+
       // pushes element to corresponding project's array
       for (let i = 0; i < mainArray.length; i++) {
         if (mainArray[i].id == parent.dataset.order) {
           mainArray[i].arr.push(new subDir(mainArray[i].arr.length));
-          // console.log(mainArray[i].arr[mainArray[i].arr.length + 1]);
-          // let x = mainArray[i].arr.length - 1;
 
-          //mainArray[i].arr[1].arr
           let z = mainArray[i].arr[mainArray[i].arr.length - 1].arr;
           console.log(z);
-          // let y = mainArray[i].arr[mainArray[i].length - 1];
-          // console.log(y);
-          // console.log(x);
-          // console.log(mainArray[i].arr[x]);
+
           project.addEventListener("click", function () {
             subDirClickEvents(
               mainArray[i].arr[mainArray[i].arr.length - 1].arr
@@ -165,7 +160,11 @@ function renderNotes(subDir) {
     let important = subDir[i].important;
     let text = subDir[i].text;
     let date = subDir[i].date;
-    projectList.prepend(makeNote(important, text, date));
+    if (subDir[i] !== "") {
+      projectList.prepend(
+        makeNote(important, text, date, subDir[i], subDir, i)
+      );
+    }
   }
 }
 
@@ -175,10 +174,6 @@ function makeAddNoteBtn() {
   btn.textContent = "Add note";
   return btn;
 }
-
-// function removeMakeAddNoteBtn() {
-//   document.querySelector(".add-note").remove();
-// }
 
 //creates form for making notes nodeElements
 function createNoteForm(subDir) {
@@ -205,7 +200,6 @@ function createNoteForm(subDir) {
   noteForm.appendChild(dateInput);
 
   return noteForm;
-  // document.querySelector(".project-list").appendChild(noteForm);
 }
 
 function deleteNoteForm() {
@@ -213,21 +207,37 @@ function deleteNoteForm() {
 }
 
 // returns note nodeElement
-function makeNote(important, noteText, noteDate) {
+function makeNote(important, noteText, noteDate, obj, objArray, iteration) {
   let wrapper = document.createElement("div");
   wrapper.classList.add("note");
 
   let star = document.createElement("img");
+  //toggle star to active and inactive
+
+  star.addEventListener("click", function () {
+    obj.important = !obj.important;
+    renderNotes(objArray);
+  });
   star.classList.add("star");
-  if (important == true) {
-    star.src = "../star-filled.png";
-  } else {
-    star.src = "../star.png";
+  function changeStarImg() {
+    if (important == true) {
+      star.src = "../star-filled.png";
+    } else {
+      star.src = "../star.png";
+    }
   }
+
+  changeStarImg();
 
   let text = document.createElement("div");
   text.classList.add("note-s");
   text.textContent = noteText;
+  // add event listener to note
+  //that will delete object from array on click
+  text.addEventListener("click", function () {
+    objArray[iteration] = "";
+    renderNotes(objArray);
+  });
 
   let date = document.createElement("div");
   date.classList.add("due-date");
@@ -260,5 +270,13 @@ function subDirClickEvents(subDirTarget) {
   // renders notes
   renderNotes(subDirTarget);
 }
+
+// all below functions will fill notes container (and clear at start)
+//and they will not append input
+
+// function that will filter all tasks
+// function that will filter tasks for today
+// function that will filter tasks for next 7 days from today's date
+// function that will filter important tasks
 
 export { callProjectContainerForm, createProjectContainer };
