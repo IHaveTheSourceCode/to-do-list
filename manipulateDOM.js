@@ -33,7 +33,6 @@ function createProjectContainer(projectName) {
   img.alt = "open notes image.";
   let orderFixed = orderIteration;
   img.addEventListener("click", function () {
-    console.log(orderFixed);
     toggleProjectSubdirectory(orderFixed);
   });
   orderIteration++;
@@ -56,9 +55,7 @@ function createProjectContainer(projectName) {
   document.querySelector("#projects-nav").appendChild(wrapper);
 
   let prContainer = new projectsContainer(elementId);
-  console.log(prContainer);
   mainArray.push(prContainer);
-  console.log(mainArray);
   elementId++;
 }
 
@@ -84,25 +81,22 @@ function appendProjectListener(btn, parent) {
       project_name.textContent = input.value;
       project.appendChild(project_name);
 
+      let x;
+
       // pushes element to corresponding project's array
       for (let i = 0; i < mainArray.length; i++) {
         if (mainArray[i].id == parent.dataset.order) {
           mainArray[i].arr.push(new subDir(mainArray[i].arr.length));
-
-          let z = mainArray[i].arr[mainArray[i].arr.length - 1].arr;
-          console.log(z);
-
-          project.addEventListener("click", function () {
-            subDirClickEvents(
-              mainArray[i].arr[mainArray[i].arr.length - 1].arr
-            );
-            document.querySelectorAll(".project").forEach((project) => {
-              project.classList.remove("active-subdir");
-            });
-            project.classList.add("active-subdir");
-          });
+          x = mainArray[i].arr[mainArray[i].arr.length - 1].arr;
         }
       }
+      project.addEventListener("click", function () {
+        subDirClickEvents(x);
+        document.querySelectorAll(".project").forEach((project) => {
+          project.classList.remove("active-subdir");
+        });
+        project.classList.add("active-subdir");
+      });
       parent.prepend(project);
       input.value = "";
       parent.appendChild(input);
@@ -268,9 +262,7 @@ function clearDisplay() {
 function subDirClickEvents(subDirTarget) {
   clearDisplay();
   // appends form for filling notes to notes container
-  //btn adding must happen first
   let notesContainer = document.querySelector(".project-list");
-  //add btn that has event listener below
 
   notesContainer.appendChild(createNoteForm(subDirTarget));
 
@@ -281,28 +273,23 @@ function subDirClickEvents(subDirTarget) {
 // all below functions will fill notes container (and clear at start)
 //and they will not append input
 
-// Main Array [[ProjectArray], [ProjectArray], ...]
-// Project Array [[SubArray], [SubArray], ...]
-// Sub Array [ArrOfNotes]
-// function that will get over all notes
-function checkNotes(filterFunc) {
-  targetNotesArr = [];
+// function that will add all tasks
+function getAllTasks() {
+  let targetNotesArr = [];
   for (let i = 0; i < mainArray.length; i++) {
     for (let j = 0; j < mainArray[i].arr.length; j++) {
       for (let k = 0; k < mainArray[i].arr[j].arr.length; k++) {
-        filterFunc(mainArray[i].arr[j].arr[k], targetNotesArr);
+        if (mainArray[i].arr[j].arr[k].text) {
+          targetNotesArr.push(mainArray[i].arr[j].arr[k]);
+        }
       }
     }
   }
+  document.querySelectorAll(".active-subdir").forEach((target) => {
+    target.classList.remove("active-subdir");
+  });
   renderNotes(targetNotesArr);
 }
-// function that will add all tasks
-function getAllTasks(targetObj, sumArray) {
-  if (targetObj.text) {
-    sumArray.push(targetObj);
-  }
-}
-
 //function that will get today's date
 function getTodaysDate() {
   let today = new Date();
@@ -318,44 +305,103 @@ function getTodaysDate() {
 function getNextWeekDate() {
   function addDays(date, days) {
     let result = new Date(date);
+
     result.setDate(result.getDate() + days);
+
+    let day = String(result.getDate()).padStart(2, "0");
+    let month = String(result.getMonth() + 1).padStart(2, "0"); //January is 0!
+    let year = result.getFullYear();
+
+    result = year + "-" + month + "-" + day;
+
     return result;
   }
   return addDays(getTodaysDate(), 7);
 }
 
 // function that will filter tasks for today
-function filterByDateToday(targetObj, sumArray) {
-  if (targetObj.date == getTodaysDate()) {
-    sumArray.push(targetObj);
+function filterByDateToday() {
+  let targetNotesArr = [];
+  for (let i = 0; i < mainArray.length; i++) {
+    for (let j = 0; j < mainArray[i].arr.length; j++) {
+      for (let k = 0; k < mainArray[i].arr[j].arr.length; k++) {
+        if (mainArray[i].arr[j].arr[k].date == getTodaysDate()) {
+          targetNotesArr.push(mainArray[i].arr[j].arr[k]);
+        }
+      }
+    }
   }
+  document.querySelectorAll(".active-subdir").forEach((target) => {
+    target.classList.remove("active-subdir");
+  });
+  renderNotes(targetNotesArr);
 }
-
 // function that will filter tasks for next 7 days from today's date
-function filterByDateLastWeek(targetObj, sumArray) {
-  if (
-    targetObj.date >= getTodaysDate() &&
-    targetObj.date <= getNextWeekDate()
-  ) {
-    sumArray.push(targetObj);
+function filterByDateLastWeek() {
+  let targetNotesArr = [];
+  for (let i = 0; i < mainArray.length; i++) {
+    for (let j = 0; j < mainArray[i].arr.length; j++) {
+      for (let k = 0; k < mainArray[i].arr[j].arr.length; k++) {
+        if (
+          mainArray[i].arr[j].arr[k].date >= getTodaysDate() &&
+          mainArray[i].arr[j].arr[k].date <= getNextWeekDate()
+        ) {
+          targetNotesArr.push(mainArray[i].arr[j].arr[k]);
+        }
+      }
+    }
   }
+  document.querySelectorAll(".active-subdir").forEach((target) => {
+    target.classList.remove("active-subdir");
+  });
+  renderNotes(targetNotesArr);
+}
+// function that will filter important tasks
+function filterByImportance() {
+  let targetNotesArr = [];
+  for (let i = 0; i < mainArray.length; i++) {
+    for (let j = 0; j < mainArray[i].arr.length; j++) {
+      for (let k = 0; k < mainArray[i].arr[j].arr.length; k++) {
+        if (mainArray[i].arr[j].arr[k].important == true) {
+          targetNotesArr.push(mainArray[i].arr[j].arr[k]);
+        }
+      }
+    }
+  }
+  document.querySelectorAll(".active-subdir").forEach((target) => {
+    target.classList.remove("active-subdir");
+  });
+  renderNotes(targetNotesArr);
 }
 
-// function that will filter important tasks
-function filterByImportance(targetObj, sumArray) {
-  if (targetObj.important == true) {
-    sumArray.push(targetObj);
-  }
+// adds active status style to an element
+function setActiveStatusStyle(element) {
+  element.classList.add("active-subdir");
 }
 
 // sets all above functions to corresponding elements of the app
 const allTasks = document.querySelector(".all-tasks");
-allTasks.addEventListener("click");
+allTasks.addEventListener("click", function () {
+  getAllTasks();
+  setActiveStatusStyle(allTasks);
+});
 
 const todaysTasks = document.querySelector(".todays-tasks");
+todaysTasks.addEventListener("click", function () {
+  filterByDateToday();
+  setActiveStatusStyle(todaysTasks);
+});
 
 const nextWeekTasks = document.querySelector(".next-week-tasks");
+nextWeekTasks.addEventListener("click", function () {
+  filterByDateLastWeek();
+  setActiveStatusStyle(nextWeekTasks);
+});
 
 const importantTasks = document.querySelector(".important-tasks");
+importantTasks.addEventListener("click", function () {
+  filterByImportance();
+  setActiveStatusStyle(importantTasks);
+});
 
 export { callProjectContainerForm, createProjectContainer };
