@@ -31,8 +31,10 @@ function createProjectContainer(projectName) {
   img.classList.add("arrow-down-image");
   img.src = "../arrow-down.png";
   img.alt = "open notes image.";
+  let orderFixed = orderIteration;
   img.addEventListener("click", function () {
-    toggleProjectSubdirectory(orderIteration);
+    console.log(orderFixed);
+    toggleProjectSubdirectory(orderFixed);
   });
   orderIteration++;
   const paragraph = document.createElement("p");
@@ -94,6 +96,10 @@ function appendProjectListener(btn, parent) {
             subDirClickEvents(
               mainArray[i].arr[mainArray[i].arr.length - 1].arr
             );
+            document.querySelectorAll(".project").forEach((project) => {
+              project.classList.remove("active-subdir");
+            });
+            project.classList.add("active-subdir");
           });
         }
       }
@@ -183,6 +189,7 @@ function createNoteForm(subDir) {
   let textInput = document.createElement("input");
   textInput.type = "text";
   textInput.classList.add("note-text");
+  textInput.placeholder = "My fresh new task. ";
 
   let dateInput = document.createElement("input");
   dateInput.type = "date";
@@ -274,9 +281,81 @@ function subDirClickEvents(subDirTarget) {
 // all below functions will fill notes container (and clear at start)
 //and they will not append input
 
-// function that will filter all tasks
+// Main Array [[ProjectArray], [ProjectArray], ...]
+// Project Array [[SubArray], [SubArray], ...]
+// Sub Array [ArrOfNotes]
+// function that will get over all notes
+function checkNotes(filterFunc) {
+  targetNotesArr = [];
+  for (let i = 0; i < mainArray.length; i++) {
+    for (let j = 0; j < mainArray[i].arr.length; j++) {
+      for (let k = 0; k < mainArray[i].arr[j].arr.length; k++) {
+        filterFunc(mainArray[i].arr[j].arr[k], targetNotesArr);
+      }
+    }
+  }
+  renderNotes(targetNotesArr);
+}
+// function that will add all tasks
+function getAllTasks(targetObj, sumArray) {
+  if (targetObj.text) {
+    sumArray.push(targetObj);
+  }
+}
+
+//function that will get today's date
+function getTodaysDate() {
+  let today = new Date();
+  let day = String(today.getDate()).padStart(2, "0");
+  let month = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  let year = today.getFullYear();
+
+  today = year + "-" + month + "-" + day;
+  return today;
+}
+
+//function that will get date 7 days ahead
+function getNextWeekDate() {
+  function addDays(date, days) {
+    let result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  }
+  return addDays(getTodaysDate(), 7);
+}
+
 // function that will filter tasks for today
+function filterByDateToday(targetObj, sumArray) {
+  if (targetObj.date == getTodaysDate()) {
+    sumArray.push(targetObj);
+  }
+}
+
 // function that will filter tasks for next 7 days from today's date
+function filterByDateLastWeek(targetObj, sumArray) {
+  if (
+    targetObj.date >= getTodaysDate() &&
+    targetObj.date <= getNextWeekDate()
+  ) {
+    sumArray.push(targetObj);
+  }
+}
+
 // function that will filter important tasks
+function filterByImportance(targetObj, sumArray) {
+  if (targetObj.important == true) {
+    sumArray.push(targetObj);
+  }
+}
+
+// sets all above functions to corresponding elements of the app
+const allTasks = document.querySelector(".all-tasks");
+allTasks.addEventListener("click");
+
+const todaysTasks = document.querySelector(".todays-tasks");
+
+const nextWeekTasks = document.querySelector(".next-week-tasks");
+
+const importantTasks = document.querySelector(".important-tasks");
 
 export { callProjectContainerForm, createProjectContainer };
