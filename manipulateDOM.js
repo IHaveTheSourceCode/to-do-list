@@ -57,6 +57,7 @@ function createProjectContainer(projectName) {
   let prContainer = new projectsContainer(elementId);
   mainArray.push(prContainer);
   elementId++;
+  return wrapper;
 }
 
 // shows/hides directory list
@@ -108,6 +109,32 @@ function appendProjectListener(btn, parent) {
     unappendProjectForms();
     parent.appendChild(input);
   });
+}
+
+function testAppend(subDirName, parent) {
+  let project = document.createElement("div");
+  project.classList.add("project");
+  let project_name = document.createElement("p");
+  project_name.textContent = subDirName;
+  project.appendChild(project_name);
+
+  let x;
+
+  for (let i = 0; i < mainArray.length; i++) {
+    if (mainArray[i].id == parent.dataset.order) {
+      mainArray[i].arr.push(new subDir(mainArray[i].arr.length));
+      x = mainArray[i].arr[mainArray[i].arr.length - 1].arr;
+    }
+  }
+  project.addEventListener("click", function () {
+    subDirClickEvents(x);
+    document.querySelectorAll(".project").forEach((project) => {
+      project.classList.remove("active-subdir");
+    });
+    project.classList.add("active-subdir");
+  });
+  parent.prepend(project);
+  // unappendProjectForms();
 }
 
 // create Project on form fill
@@ -190,12 +217,32 @@ function createNoteForm(subDir) {
   dateInput.classList.add("note-date");
   textInput.addEventListener("keydown", (e) => {
     if (e.code == "Enter") {
+      if (textInput.value != "") {
+        subDir.push(new createNote(false, textInput.value, dateInput.value));
+        dateInput.value = "";
+        textInput.value = "";
+        textInput.placeholder = "My fresh new task. ";
+        renderNotes(subDir);
+      } else {
+        textInput.placeholder = "Fill note's text before adding it.";
+      }
+    }
+  });
+
+  let button1 = makeAddNoteBtn();
+  button1.addEventListener("click", function () {
+    if (textInput.value != "") {
       subDir.push(new createNote(false, textInput.value, dateInput.value));
       dateInput.value = "";
       textInput.value = "";
+      textInput.placeholder = "My fresh new task. ";
       renderNotes(subDir);
+    } else {
+      textInput.placeholder = "Fill note's text before adding it.";
     }
   });
+
+  document.querySelector(".project-list").appendChild(button1);
 
   noteForm.appendChild(textInput);
   noteForm.appendChild(dateInput);
@@ -379,29 +426,48 @@ function setActiveStatusStyle(element) {
   element.classList.add("active-subdir");
 }
 
+// deletes form for appending notes
+function removeNoteAppendingForm() {
+  let btn = document.querySelector(".add-note");
+  let noteForm = document.querySelector(".note-form");
+  if (btn) btn.remove();
+  if (noteForm) noteForm.remove();
+}
+
 // sets all above functions to corresponding elements of the app
 const allTasks = document.querySelector(".all-tasks");
 allTasks.addEventListener("click", function () {
   getAllTasks();
+  removeNoteAppendingForm();
   setActiveStatusStyle(allTasks);
 });
 
 const todaysTasks = document.querySelector(".todays-tasks");
 todaysTasks.addEventListener("click", function () {
   filterByDateToday();
+  removeNoteAppendingForm();
   setActiveStatusStyle(todaysTasks);
 });
 
 const nextWeekTasks = document.querySelector(".next-week-tasks");
 nextWeekTasks.addEventListener("click", function () {
   filterByDateLastWeek();
+  removeNoteAppendingForm();
   setActiveStatusStyle(nextWeekTasks);
 });
 
 const importantTasks = document.querySelector(".important-tasks");
 importantTasks.addEventListener("click", function () {
   filterByImportance();
+  removeNoteAppendingForm();
   setActiveStatusStyle(importantTasks);
 });
 
-export { callProjectContainerForm, createProjectContainer };
+function retriveAppData() {}
+
+export {
+  callProjectContainerForm,
+  createProjectContainer,
+  testAppend,
+  renderNotes,
+};
