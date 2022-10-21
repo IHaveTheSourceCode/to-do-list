@@ -355,9 +355,6 @@ nav {
   border-radius: 0 15px 15px 0;
 }
 
-.note-form:hover {
-}
-
 .note-text:hover {
   outline: 2px solid rgba(128, 128, 128, 0.4);
   cursor: pointer;
