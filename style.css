@@ -134,6 +134,7 @@ nav {
 
 .add-project-button {
   width: 1.6rem;
+  height: 1.6rem;
   padding: 0.2rem;
   transition: transform 0.1s;
 }
