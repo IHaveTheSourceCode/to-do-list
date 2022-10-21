@@ -367,3 +367,7 @@ nav {
   outline: 2px solid rgba(128, 128, 128, 0.4);
   cursor: pointer;
 }
+
+.open-project-form {
+  height: 1.4rem;
+}
