@@ -215,7 +215,7 @@ function createNoteForm(subDir) {
   let dateInput = document.createElement("input");
   dateInput.type = "date";
   dateInput.classList.add("note-date");
-  date.placeholder = "yyyy-mm-dd";
+  dateInput.placeholder = "yyyy-mm-dd";
   textInput.addEventListener("keydown", (e) => {
     if (e.code == "Enter") {
       if (textInput.value != "") {
